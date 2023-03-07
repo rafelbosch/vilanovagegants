@@ -116,6 +116,39 @@ function coreo15_res () {
     }
     ballant = 0
 }
+function coreo15_ultrasons () {
+    linea = 0
+    valor = 0
+    anterior = 0
+    ballant = 1
+    velmotor = 30
+    if (Gegant == "M") {
+        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, velmotor)
+        basic.pause(2000)
+        distancia = maqueen.Ultrasonic(PingUnit.Centimeters)
+        while (distancia > 12) {
+            distancia = maqueen.Ultrasonic(PingUnit.Centimeters)
+        }
+        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 15)
+        while (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0) {
+        	
+        }
+        maqueen.motorStop(maqueen.Motors.M2)
+    } else {
+        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, velmotor)
+        basic.pause(2000)
+        distancia = maqueen.Ultrasonic(PingUnit.Centimeters)
+        while (distancia > 12) {
+            distancia = maqueen.Ultrasonic(PingUnit.Centimeters)
+        }
+        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 15)
+        while (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
+        	
+        }
+        maqueen.motorStop(maqueen.Motors.M1)
+    }
+    ballant = 0
+}
 input.onButtonPressed(Button.A, function () {
     Gegant = "M"
     basic.showLeds(`
