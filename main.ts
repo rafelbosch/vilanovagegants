@@ -177,7 +177,7 @@ let Gegant = ""
 let ballant = 0
 ballant = 0
 Gegant = "?"
-radio.setGroup(101)
+radio.setGroup(100)
 basic.showLeds(`
     . # # # .
     # . . . #
