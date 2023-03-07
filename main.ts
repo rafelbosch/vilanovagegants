@@ -188,16 +188,16 @@ function coreo17 () {
         maqueen.motorStop(maqueen.Motors.M2)
     } else {
         maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, velmotor)
-        while (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
+        while (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
         	
         }
-        while (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0) {
+        while (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
         	
         }
-        while (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
+        while (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
         	
         }
-        while (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0) {
+        while (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
             maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 15)
         }
         maqueen.motorStop(maqueen.Motors.M1)
