@@ -1,66 +1,74 @@
 function coreo15 () {
     linea = 0
+    valor = 0
+    anterior = 0
     ballant = 1
     velmotor = 25
     if (Gegant == "\"M\"") {
         maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, velmotor)
-        basic.pause(500)
-        while (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
-            basic.pause(100)
-        }
-        while (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
-            basic.pause(100)
-        }
-        while (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
-            basic.pause(100)
-        }
-        while (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
-            basic.pause(100)
-        }
-        while (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
+        while (linea < 4) {
+            valor = maqueen.readPatrol(maqueen.Patrol.PatrolRight)
+            if (anterior != valor) {
+                linea = linea + 1
+            }
             basic.pause(100)
         }
         maqueen.motorStop(maqueen.Motors.M2)
     } else {
         maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, velmotor)
-        basic.pause(500)
-        while (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0) {
-            basic.pause(100)
-        }
-        while (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
-            basic.pause(100)
-        }
-        while (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0) {
-            basic.pause(100)
-        }
-        while (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
-            basic.pause(100)
-        }
-        while (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0) {
-            basic.pause(100)
+        while (linea < 4) {
+            valor = maqueen.readPatrol(maqueen.Patrol.PatrolLeft)
+            if (anterior != valor) {
+                linea = linea + 1
+                basic.pause(100)
+            }
         }
         maqueen.motorStop(maqueen.Motors.M2)
     }
     ballant = 0
 }
+radio.onReceivedNumber(function (receivedNumber) {
+    if (receivedNumber == 1) {
+        relvelocidad = 0.5
+    } else if (receivedNumber == -1) {
+        relvelocidad = 0.7
+    } else {
+    	
+    }
+})
 function coreo21 () {
-    while (!(Encontrado)) {
-        distancia = 0
-        if (distancia < 30) {
-            Encontrado = 1
+    ballant = 1
+    velmotor = 25
+    linea = 0
+    anterior = 1
+    relvelocidad = 0.6
+    if (Gegant == "\"X\"") {
+        distanciabase = maqueen.Ultrasonic(PingUnit.Centimeters)
+        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, 15)
+        while (linea < 4) {
+            valor = maqueen.readPatrol(maqueen.Patrol.PatrolLeft)
+            if (anterior != valor) {
+                linea = linea + 1
+            }
+            basic.pause(100)
         }
-    }
-    while (Encontrado) {
-        distancia = maqueen.Ultrasonic(PingUnit.Centimeters)
-        if (distancia > 30) {
-            perseguir = 1
-            maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 15)
-            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, 15)
-        } else if (perseguir) {
-            perseguir = 0
-            maqueen.motorStop(maqueen.Motors.All)
+        maqueen.motorStop(maqueen.Motors.M2)
+    } else {
+        while (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
+            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, velmotor)
+            basic.pause(100)
         }
+        while (linea < 3) {
+            valor = maqueen.readPatrol(maqueen.Patrol.PatrolLeft)
+            if (anterior != valor) {
+                linea = linea + 1
+            }
+            basic.pause(100)
+        }
+        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, velmotor)
+        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, velmotor * relvelocidad)
     }
+    ballant = 0
 }
 input.onButtonPressed(Button.A, function () {
     Gegant = "M"
@@ -72,6 +80,20 @@ input.onButtonPressed(Button.A, function () {
         # . . . #
         `)
 })
+function persegeix () {
+    distancia = maqueen.Ultrasonic(PingUnit.Centimeters)
+    if (distancia > 30) {
+        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, 25)
+    } else {
+        if (distancia > distanciabase * 1.1) {
+            radio.sendNumber(1)
+        } else if (distancia < distanciabase * 0.9) {
+            radio.sendNumber(-1)
+        } else {
+            radio.sendNumber(0)
+        }
+    }
+}
 function Coreo13 () {
     ballant = 1
     velmotor = 25
@@ -92,6 +114,35 @@ function Coreo13 () {
     maqueen.motorStop(maqueen.Motors.All)
     ballant = 0
 }
+function coreo17 () {
+    linea = 0
+    valor = 0
+    anterior = 0
+    ballant = 1
+    velmotor = 25
+    if (Gegant == "\"X\"") {
+        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, velmotor)
+        while (linea < 4) {
+            valor = maqueen.readPatrol(maqueen.Patrol.PatrolRight)
+            if (anterior != valor) {
+                linea = linea + 1
+            }
+            basic.pause(100)
+        }
+        maqueen.motorStop(maqueen.Motors.M2)
+    } else {
+        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, velmotor)
+        while (linea < 4) {
+            valor = maqueen.readPatrol(maqueen.Patrol.PatrolLeft)
+            if (anterior != valor) {
+                linea = linea + 1
+                basic.pause(100)
+            }
+        }
+        maqueen.motorStop(maqueen.Motors.M2)
+    }
+    ballant = 0
+}
 radio.onReceivedString(function (receivedString) {
     coreografia_part = receivedString
     basic.showString(receivedString)
@@ -107,10 +158,12 @@ input.onButtonPressed(Button.B, function () {
         `)
 })
 let coreografia_part = ""
-let perseguir = 0
 let distancia = 0
-let Encontrado = 0
+let distanciabase = 0
+let relvelocidad = 0
 let velmotor = 0
+let anterior = 0
+let valor = 0
 let linea = 0
 let Gegant = ""
 let ballant = 0
