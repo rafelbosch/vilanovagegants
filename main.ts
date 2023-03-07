@@ -33,7 +33,7 @@ radio.onReceivedNumber(function (receivedNumber) {
     } else if (receivedNumber == -1) {
         relvelocidad = 0.7
     } else {
-    	
+        relvelocidad = 0.6
     }
 })
 function coreo21 () {
@@ -50,6 +50,7 @@ function coreo21 () {
             if (anterior != valor) {
                 linea = linea + 1
             }
+            persegeixX()
             basic.pause(100)
         }
         maqueen.motorStop(maqueen.Motors.M2)
@@ -63,10 +64,15 @@ function coreo21 () {
             if (anterior != valor) {
                 linea = linea + 1
             }
+            maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, velmotor)
+            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, velmotor * relvelocidad)
             basic.pause(100)
         }
-        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, velmotor)
-        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, velmotor * relvelocidad)
+        while (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0) {
+            maqueen.motorStop(maqueen.Motors.M2)
+            basic.pause(200)
+        }
+        maqueen.motorStop(maqueen.Motors.M1)
     }
     ballant = 0
 }
@@ -80,14 +86,16 @@ input.onButtonPressed(Button.A, function () {
         # . . . #
         `)
 })
-function persegeix () {
+function persegeixX () {
     distancia = maqueen.Ultrasonic(PingUnit.Centimeters)
     if (distancia > 30) {
         maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, 25)
     } else {
         if (distancia > distanciabase * 1.1) {
+            // Si esta lluny
             radio.sendNumber(1)
         } else if (distancia < distanciabase * 0.9) {
+            // Si esta aprop
             radio.sendNumber(-1)
         } else {
             radio.sendNumber(0)
